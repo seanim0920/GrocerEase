@@ -6,19 +6,6 @@ import RecipeScreen from './components/RecipeScreen';
 import DataBase from './components/firebase.js';
 import LoadingScreen from './components/LoadingScreen';
 
-//For android get rid of Yellow Box-------------------------
-import { YellowBox } from 'react-native';
-import _ from 'lodash';
-
-YellowBox.ignoreWarnings(['Setting a timer']);
-const _console = _.clone(console);
-console.warn = message => {
-	if (message.indexOf('Setting a timer') <= -1) {
-		_console.warn(message);
-	}
-};
-//End Yellowbox ignore--------------------------------------
-
 export default class App extends Component {
 	constructor(props) {
 		super(props)
@@ -35,6 +22,7 @@ export default class App extends Component {
 
 	loginAndGetData = (userId) => {
 		this.setState({ loading: true })
+		console.log("yes");
 		DataBase.createFirebaseInventoryListener(
 			userId,
 			() => {return this.state.receivingChange},
@@ -45,7 +33,6 @@ export default class App extends Component {
 		DataBase.getFirebaseRecipes((list) => {
 			list.forEach(recipe => {
 				recipe.key = recipe.title
-				recipe.manualMatching = false;
 				recipe.matchingIngredients = [];
 				recipe.ingredients.forEach(ingredient => {
 					ingredient.perfectMatch = false;
@@ -258,20 +245,22 @@ export default class App extends Component {
 				this.setState({ recipes: list });
 			}}
 
-			setManualMatching={(recipe, parameter) => {
-				var newInventory = this.state.recipes.slice(0);
-				var foundRecipe = newInventory.find(eachRecipe => eachRecipe.title === recipe.title);
-				foundRecipe.manualMatching = parameter;
-				this.setState({ recipes: newInventory, });
-			}}
-
 			removeIngredientFromMatching={(recipe, ingredient) => {
+				console.log("removing ingredient from");
 				var newInventory = this.state.recipes.slice(0);
 				var foundRecipe = newInventory.find(eachRecipe => eachRecipe.title === recipe.title);
 				var foundIngredient = foundRecipe.matchingIngredients.find(eachIngredient => eachIngredient.name === ingredient.name);
 				if (typeof foundIngredient != 'undefined')
 					foundRecipe.matchingIngredients.splice(foundRecipe.matchingIngredients.indexOf(foundIngredient), 1)
 				this.setState({ recipes: newInventory, });
+			}}
+
+			foundIngredientInMatching={(recipe, ingredient) => {
+				var newInventory = this.state.recipes.slice(0);
+				var foundRecipe = newInventory.find(eachRecipe => eachRecipe.title === recipe.title);
+				var foundIngredient = foundRecipe.matchingIngredients.find(eachIngredient => eachIngredient.name === ingredient.name);
+				if (typeof foundIngredient != 'undefined') return true;
+				else return false;
 			}}
 			
 			addIngredientToMatching={(recipe, ingredient) => {
@@ -304,41 +293,39 @@ export default class App extends Component {
 
 	checkRecipesWithMyIngredients = (list) => {
 		list.forEach(recipe => {
-			if (!recipe.manualMatching) {
-				recipe.matchingIngredients = [];
-				this.state.inventory.forEach(userIngredient => {
-					let latestMatch = 0;
-					let matchedIngredient = null;
-					let percentMatch = 0;
-					recipe.ingredients.forEach(ingredient => {
-						ingredient.name = ingredient.name.toTitleCase()
-						wordsInUserIngredient = userIngredient.key.split(" ");
-						percentMatch = 0;
-						wordsInUserIngredient.forEach(word => {
-							if (ingredient.name.indexOf(word) > -1) {
-								percentMatch = percentMatch + (1 / wordsInUserIngredient.length)
-							}
-							if (ingredient.name.indexOf(word) > -1 && ingredient.name.indexOf(word) / ingredient.name.length > latestMatch) {
-								latestMatch = ingredient.name.indexOf(word) / ingredient.name.length
-								matchedPosition = ingredient.name.indexOf(word) / ingredient.name.length
-								matchedIngredient = ingredient;
-							}
-						})
-						if (percentMatch > 0.4) {
+			recipe.matchingIngredients = [];
+			this.state.inventory.forEach(userIngredient => {
+				let latestMatch = 0;
+				let matchedIngredient = null;
+				let percentMatch = 0;
+				recipe.ingredients.forEach(ingredient => {
+					ingredient.name = ingredient.name.toTitleCase()
+					wordsInUserIngredient = userIngredient.key.split(" ");
+					percentMatch = 0;
+					wordsInUserIngredient.forEach(word => {
+						if (ingredient.name.indexOf(word) > -1) {
+							percentMatch = percentMatch + (1 / wordsInUserIngredient.length)
+						}
+						if (ingredient.name.indexOf(word) > -1 && ingredient.name.indexOf(word) / ingredient.name.length > latestMatch) {
+							latestMatch = ingredient.name.indexOf(word) / ingredient.name.length
+							matchedPosition = ingredient.name.indexOf(word) / ingredient.name.length
 							matchedIngredient = ingredient;
 						}
 					})
-					if (matchedIngredient != null) {
-						let existingIngredient = recipe.matchingIngredients.find(eachIngredient => eachIngredient.name === matchedIngredient.name)
-						if (typeof existingIngredient == 'undefined') {
-							recipe.matchingIngredients.push(matchedIngredient);	
-						}
-						if ((matchedIngredient.name.length / userIngredient.key.length) < 4.5 || percentMatch > 0.7 || latestMatch > 0.7) {
-							matchedIngredient.perfectMatch = true;
-						}
+					if (percentMatch > 0.4) {
+						matchedIngredient = ingredient;
 					}
-				});
-			}
+				})
+				if (matchedIngredient != null) {
+					let existingIngredient = recipe.matchingIngredients.find(eachIngredient => eachIngredient.name === matchedIngredient.name)
+					if (typeof existingIngredient == 'undefined') {
+						recipe.matchingIngredients.push(matchedIngredient);	
+					}
+					if ((matchedIngredient.name.length / userIngredient.key.length) < 5 || percentMatch > 0.6 || latestMatch > 0.6) {
+						matchedIngredient.perfectMatch = true;
+					}
+				}
+			});
 		});
 
 		list.sort((recipeA, recipeB) => {

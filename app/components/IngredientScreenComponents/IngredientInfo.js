@@ -442,7 +442,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     flexDirection: 'column',
-    backgroundColor: '#D0E3F5',
+    backgroundColor: '#D4E8FD',
     justifyContent: 'center',
     alignItems: 'flex-start',
   },
@@ -467,7 +467,7 @@ const styles = StyleSheet.create({
     paddingTop: 5,
     paddingLeft: 10,
     paddingRight: 10,
-    backgroundColor: '#D0E3F5',
+    backgroundColor: '#D4E8FD',
   },
   icon: {
     marginLeft: 10
@@ -481,9 +481,6 @@ const styles = StyleSheet.create({
   numberInput: {
     fontSize: 15,
     padding: 3,
-    borderColor: 'black',
-    borderWidth: 1,
-    borderStyle: 'solid',
   },
   textInput: {
     fontSize: 15,

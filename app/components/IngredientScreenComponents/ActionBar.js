@@ -29,7 +29,7 @@ export default class ActionBar extends Component {
         >
           <Icon
             style={styles.icon}
-            name="list-box"
+            name="swap-vertical"
             color="#51A4F7"
             size={24}
           />

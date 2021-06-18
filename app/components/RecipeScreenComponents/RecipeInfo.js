@@ -1,79 +1,113 @@
-import React, { Component } from 'react';
-import {View, AppRegistry, Text, TextInput, Button, StyleSheet, TouchableOpacity, StatusBar} from 'react-native';
-import Icon from '../SharedComponents/Icon';
+import React, { Component } from "react";
+import {
+  View,
+  AppRegistry,
+  Text,
+  TextInput,
+  Button,
+  StyleSheet,
+  TouchableOpacity,
+  StatusBar,
+} from "react-native";
+import Icon from "../SharedComponents/Icon";
 
 export default class RecipeInfo extends Component {
   static defaultProps = {
     item: null,
-  }
+  };
 
   render() {
     return (
-      <View style={{ flexDirection: "column" }}>
-      <Button
-          style={styles.button}
-          title={this.props.item.manualMatching ? 'Manual Matching: On' : 'Manual Matching: Off'}
-          onPress={() => this.props.setManualMatching(this.props.item, !this.props.item.manualMatching)} />
+      <View style={{ flexDirection: "column", paddingTop: 10 }}>
         <View style={styles.container}>
-          <View style={[styles.container, { flexDirection: 'column' }]}>
+          <View style={[styles.container, { flexDirection: "column" }]}>
             <Text style={styles.infoTitle}>Ingredients:</Text>
-            {this.props.item.ingredients.map(element => {
+            {this.props.item.ingredients.map((element) => {
               return (
-                <View key={element.name}
-                  style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                  {
-                    this.props.item.manualMatching
-                      ? <View>
-                        <TouchableOpacity
-                          style={styles.iconContainer}
-                          onPress={() => this.props.removeIngredientFromMatching(this.props.item, element)}
-                        >
-                          <Icon
-                            name="close"
-                            color="red"
-                            size={20}
-                          />
-                        </TouchableOpacity>
-                        <TouchableOpacity
-                          style={styles.iconContainer}
-                          onPress={() => this.props.addIngredientToMatching(this.props.item, element)}
-                        >
-                          <Icon
-                            name="checkmark"
-                            color="green"
-                            size={20}
-                          />
-                        </TouchableOpacity>
-                      </View>
-                      : null
-                  }
-                  <View style={{ flex: 1, flexWrap: 'wrap' }} >
-                    <Text
-                      style={[this.props.item.matchingIngredients.includes(element)
-                        ? (element.perfectMatch
-                          ? styles.matchingText
-                          : styles.almostText)
-                        : styles.excludesText
-                      , !this.props.item.manualMatching ? {paddingLeft: 40} : null]}>{element.quantity > 0 ? element.quantity : ''} {element.name}
-                    </Text>
+                <View
+                  key={element.name}
+                  style={{
+                    flexDirection: "row",
+                  }}
+                >
+                  <View>
+                    <TouchableOpacity
+                      style={styles.iconContainer}
+                      onPress={() =>
+                        this.props.foundIngredientInMatching(
+                          this.props.item,
+                          element
+                        )
+                          ? this.props.removeIngredientFromMatching(
+                              this.props.item,
+                              element
+                            )
+                          : this.props.addIngredientToMatching(
+                              this.props.item,
+                              element
+                            )
+                      }
+                    >
+                      <Icon
+                        name={
+                          this.props.foundIngredientInMatching(
+                            this.props.item,
+                            element
+                          )
+                            ? "close"
+                            : "checkmark"
+                        }
+                        color={
+                          this.props.foundIngredientInMatching(
+                            this.props.item,
+                            element
+                          )
+                            ? "red"
+                            : "green"
+                        }
+                        size={20}
+                      />
+                    </TouchableOpacity>
                   </View>
+                  <Text
+                    style={[
+                      styles.indentedText,
+                      this.props.item.matchingIngredients.includes(element)
+                        ? element.perfectMatch
+                          ? styles.matchingText
+                          : styles.almostText
+                        : styles.excludesText,
+                    ]}
+                  >
+                    • {element.quantity > 0 ? element.quantity : ""}{" "}
+                    {element.name}
+                  </Text>
                 </View>
-              )
+              );
             })}
           </View>
-          <View style={[styles.container, { flexDirection: 'column' }]}>
-            <Text style={styles.infoTitle}>Tools:</Text>
-            {this.props.item.equipment_names.map(element => {
+          <View
+            style={[
+              styles.container,
+              { flexDirection: "column", flexShrink: 1 },
+            ]}
+          >
+            <Text style={[styles.infoTitle, { paddingLeft: 20 }]}>Tools:</Text>
+            {this.props.item.equipment_names.map((element) => {
               return (
-                <Text key={element} style={styles.indentedText}>{element}</Text>
-              )
+                <Text
+                  key={element}
+                  style={[styles.indentedText, { paddingLeft: 20 }]}
+                >
+                  • {element}
+                </Text>
+              );
             })}
           </View>
         </View>
-        <Button
-          style={styles.button}
-          title='View Steps'
-          onPress={this.props.switchScreen} />
+        <View style={styles.button}>
+          <Button title="View Steps" onPress={this.props.switchScreen} />
+        </View>
       </View>
     );
   }
@@ -82,74 +116,68 @@ export default class RecipeInfo extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    flexDirection: 'row',
-    backgroundColor: '#D0E3F5',
-    justifyContent: 'center',
-    alignItems: 'flex-start',
+    flexDirection: "row",
+    backgroundColor: "#D4E8FD",
+    justifyContent: "center",
+    alignItems: "flex-start",
   },
   itemAndField: {
-    flexDirection: 'row',
-    alignItems: 'flex-start',
-    justifyContent: 'flex-start',
+    flexDirection: "row",
+    alignItems: "flex-start",
+    justifyContent: "flex-start",
   },
   button: {
-    alignItems:'flex-end',
-    justifyContent:'center',
-    paddingTop: 10,
+    alignItems: "center",
+    justifyContent: "center",
+    paddingTop: 20,
+    paddingBottom: 20,
     paddingLeft: 10,
     paddingRight: 10,
-    backgroundColor: '#D0E3F5',
+    backgroundColor: "#D4E8FD",
   },
   icon: {
-    flexDirection: 'row',
-    justifyContent: 'flex-end',
-    alignItems: 'flex-end'
+    flexDirection: "row",
+    justifyContent: "flex-end",
+    alignItems: "flex-end",
   },
   iconContainer: {
-    alignItems:'center',
-    justifyContent:'center',
+    alignItems: "center",
+    justifyContent: "center",
     paddingTop: 5,
-    paddingLeft: 10,
-    paddingRight: 10,
-    backgroundColor: '#D0E3F5',
+    paddingLeft: 0,
+    paddingRight: 0,
+    backgroundColor: "#D4E8FD",
   },
   matchingText: {
-    fontSize: 14,
-    padding: 5,
-    paddingLeft: 10,
-    color: 'green'
+    backgroundColor: "green",
   },
   almostText: {
-    fontSize: 14,
-    padding: 5,
-    paddingLeft: 10,
-    color: 'orange'
+    backgroundColor: "orange",
   },
   excludesText: {
-    fontSize: 14,
-    padding: 5,
-    paddingLeft: 10,
-    color: 'black',
+    color: "black",
   },
   indentedText: {
-    fontSize: 14,
+    fontSize: 15,
     padding: 5,
-    paddingLeft: 40,
-    color: 'black',
+    paddingLeft: 0,
+    color: "black",
+    flexShrink: 1,
+    flexWrap: "wrap",
   },
   iconContainer: {
-    alignItems:'center',
-    justifyContent:'center',
+    alignItems: "center",
+    justifyContent: "center",
     paddingTop: 5,
     paddingLeft: 10,
     paddingRight: 10,
-    backgroundColor: '#D0E3F5',
+    backgroundColor: "#D4E8FD",
   },
   infoTitle: {
     fontSize: 15,
     padding: 5,
     paddingLeft: 10,
-    fontWeight: 'bold',
-    color: 'black'
+    fontWeight: "bold",
+    color: "black",
   },
 });

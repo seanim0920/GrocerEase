@@ -78,7 +78,7 @@ export default class List extends Component {
       <View>
         <View style={styles.listRow}>
           <TextInput
-            style={item.quantity > 0
+            style={item.quantity > 0 || item.isExpired === 2
               ? [styles.textContainer, {flex: 1}]
               : [styles.fadedTextContainer, {flex: 1}]}
             underlineColorAndroid={'rgba(0,0,0,0)'}
@@ -92,7 +92,7 @@ export default class List extends Component {
               style={styles.iconContainer}
               onPress={decrementItemQuantity}
             >
-              {item.quantity > 0
+              {item.quantity > 0 || !item.isExpired === 2
                 ?
                 <Icon
                   name="remove"
@@ -109,7 +109,7 @@ export default class List extends Component {
             </TouchableOpacity>
             <TextInput
               underlineColorAndroid={'rgba(0,0,0,0)'}
-              style={item.quantity > 0
+              style={item.quantity > 0 || item.isExpired === 2
                 ? styles.textContainer
                 : styles.fadedTextContainer}
               keyboardType={'numeric'}
@@ -136,15 +136,22 @@ export default class List extends Component {
               onPress={infoButtonPressed}
             >
               <Icon
-                name='information-circle'
-                color={item.isExpired == 0
+                name={this.state.selectedItem == item ? 'information-circle' : 'information-circle-outline'}
+                color={item.isExpired === 0
                   ? "#51A4F7"
-                  : item.isExpired == 1
+                  : item.isExpired === 1
                     ? 'orange'
-                    : item.isExpired == 2
+                    : item.isExpired === 2
                       ? 'red'
                       : 'black'}
                 size={30}
+                style={{    
+                  borderColor: 'rgba(0,0,0,0)',
+                  alignItems: 'flex-end',
+                  justifyContent: 'flex-end',
+                  width: 30,
+                  height: 30,
+                }}
               />
             </TouchableOpacity>
           </View>
@@ -182,11 +189,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
-  },
-  item: {
-    padding: 10,
-    fontSize: 18,
-    height: 44,
   },
   textInput: {
     flex: 1,

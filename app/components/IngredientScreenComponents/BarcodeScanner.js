@@ -1,6 +1,7 @@
 import React from 'react'
 import { StyleSheet, Text, View } from 'react-native'
-import { BarCodeScanner, Permissions } from 'expo'
+import { BarCodeScanner } from 'expo-barcode-scanner';
+import * as Permissions from 'expo-permissions';
 
 export default class BarcodeScanner extends React.Component {
   state = {
@@ -27,12 +28,13 @@ export default class BarcodeScanner extends React.Component {
     /*action if camera permission denied or null but camera accessed*/
     if (hasCameraPermission === null) {
       return <Text style={{
-        flexDirection: 'row',
         flex: 1,
         textAlign: 'center',
         justifyContent: 'center',
+        alignItems: 'center',
+        alignContent: 'center',
         fontWeight: 'bold',
-      }}>Requesting for camera permission</Text>
+      }}>To use the barcode scanner, please allow access to the camera</Text>
     }
     if (hasCameraPermission === false) {
       return <Text style={{

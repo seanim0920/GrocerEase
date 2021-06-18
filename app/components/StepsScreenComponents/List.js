@@ -26,6 +26,7 @@ export default class List extends Component {
           ItemSeparatorComponent={this.renderSeparator}
           keyExtractor={(item, index) => index.toString()}
           showsVerticalScrollIndicator={true}
+          contentContainerStyle={{paddingBottom: 70,}}
         />
         <View style={{
           position: 'absolute',
@@ -34,10 +35,10 @@ export default class List extends Component {
           flexDirection: 'row',
           justifyContent: 'space-around',
           alignItems: 'center',
-          paddingBottom: 25,
+          paddingBottom: 10,
           paddingTop: 10,
-        }}
-        backgroundColor={Platform.OS === 'ios' ? 'white' : 'transparent'}>
+          backgroundColor: Platform.OS === 'ios' ? "#D4E8FD" : 'transparent'
+        }}>
           <Button
             title='Previous Step'
             onPress={() => {
@@ -96,26 +97,26 @@ class ListRow extends PureComponent {
   render() {
     return (
       <View>
-          <TouchableOpacity style={styles.listRow}
+          <TouchableOpacity style={[styles.listRow, this.props.visible == 1 ? {backgroundColor: "#D4E8FD"} : null]}
             onPress={this.props.infoButtonPressed}>
             <Text
-              style={this.props.visible == 0
+              style={[styles.futureIndex, this.props.visible == 0
                 ? styles.pastIndex
                 : this.props.visible == 1
                   ? styles.currentIndex
                   : this.props.visible == 2
                     ? styles.futureIndex
-                    : styles.futureIndex}>
+                    : null]}>
               {this.props.index + 1}
             </Text>
             <Text
-              style={this.props.visible == 0
+              style={[styles.textContainer, this.props.visible == 0
                 ? styles.fadedTextContainer
                 : this.props.visible == 1
                   ? styles.highlightedTextContainer
                   : this.props.visible == 2
                     ? styles.textContainer
-                    : styles.textContainer}>
+                    : null]}>
               {this.props.item}
             </Text>
           </TouchableOpacity>
@@ -133,9 +134,9 @@ const styles = StyleSheet.create({
     flex: 1,
     flexWrap: 'wrap',
     flexDirection: "row",
-    margin: 10,
+    padding: 10,
     justifyContent: "space-between",
-    alignItems: "center"
+    alignItems: "center",
   },
   textContainer: {
     flex: 1,
@@ -144,43 +145,23 @@ const styles = StyleSheet.create({
     fontSize: 15,
   },
   highlightedTextContainer: {
-    flex: 1,
-    marginLeft: 10,
-    marginRight: 10,
-    color: '#51A4F7',
-    fontSize: 15,
+    //color: '#007BC8',
   },
   fadedTextContainer: {
-    flex: 1,
-    marginLeft: 10,
-    marginRight: 10,
-    fontSize: 15,
     color: '#ccc',
   },
   pastIndex: {
     color: '#ccc',
-    borderWidth: 1,
-    borderColor: 'rgba(0,0,0,0)',
-    alignItems: 'flex-end',
-    justifyContent: 'flex-end',
-    width: 30,
-    height: 30,
   },
   currentIndex: {
-    color: '#51A4F7',
-    fontWeight: 'bold',
-    borderWidth: 1,
-    borderColor: 'rgba(0,0,0,0)',
-    alignItems: 'flex-end',
-    justifyContent: 'flex-end',
-    width: 30,
-    height: 30,
+    //color: '#007BC8',
   },
   futureIndex: {
     borderWidth: 1,
     borderColor: 'rgba(0,0,0,0)',
     alignItems: 'flex-end',
     justifyContent: 'flex-end',
+    fontSize: 15,
     width: 30,
     height: 30,
   },

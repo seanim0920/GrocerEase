@@ -88,18 +88,14 @@ class ListRow extends PureComponent {
             style={styles.ingredientInfo}
             onPress={this.handleTextPress}>
             {this.props.sortParameter
-              ? this.props.item.matchingIngredients.length + " out of " + this.props.item.ingredients.length
+              ? this.props.item.matchingIngredients.length + " / " + this.props.item.ingredients.length
               : Math.floor(100*this.props.item.matchingIngredients.length/this.props.item.ingredients.length) + "%"
             }
           </Text>
           <Icon
             style={styles.iconInfo}
-            color={
-              this.props.item.manualMatching
-              ? 'orange'
-              : '#51A4F7'
-            }
-            name='information-circle'
+            color='#51A4F7'
+            name={this.props.visible?'information-circle':'information-circle-outline'}
             size={30}
           />
         </TouchableOpacity>
@@ -109,7 +105,6 @@ class ListRow extends PureComponent {
               {...this.props}
               item={this.props.item}
               switchScreen={this.props.viewRecipeSteps}
-              setManualMatching={this.props.setManualMatching}
             />
             : null
         }
@@ -153,9 +148,6 @@ const styles = StyleSheet.create({
     borderColor: '#ccc',
     borderBottomWidth: 1,
   },
-  icon: {
-    marginRight: 10,
-  },
   listRow: {
     flex: 1,
     flexDirection: "row",
@@ -192,15 +184,6 @@ const styles = StyleSheet.create({
     width: 30,
     height: 30,
     marginRight:10,
+    marginBottom: 4,
   },
-  iconContainer: {
-    borderWidth: 1,
-    borderColor: 'rgba(0,0,0,0)',
-    alignItems: 'center',
-    justifyContent: 'center',
-    width: 30,
-    height: 30,
-    backgroundColor: '#fff',
-    borderRadius: 30,
-  }
 });

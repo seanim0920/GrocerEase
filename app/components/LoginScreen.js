@@ -42,6 +42,7 @@ export default class UserLogin extends Component{
           style={styles.emailInput}
           placeholder="email"
           autoCapitalize="none"
+          autoCorrect={false}
           onChangeText={this.emailText}
         />
         {/*password text box*/}
@@ -113,7 +114,8 @@ const styles = StyleSheet.create({
     marginRight: 20,
     marginTop: 40,
     marginBottom: 5,
-    backgroundColor: '#D0E3F5',
+    backgroundColor: '#D4E8FD',
+    fontWeight: 'bold',
     padding: 15,
   },
   passwordInput: {
@@ -121,7 +123,8 @@ const styles = StyleSheet.create({
     marginRight: 20,
     marginTop: 5,
     marginBottom: 10,
-    backgroundColor: '#D0E3F5',
+    backgroundColor: '#D4E8FD',
+    fontWeight: 'bold',
     padding: 15,
   },
   container: {

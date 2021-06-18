@@ -85,6 +85,7 @@ export default class DataBase {
 			.catch(
 				(error) => {
 					var errorMessage = error.message;
+					console.log("Error when signing up", error);
 					alert(errorMessage);
 				}
 			)
