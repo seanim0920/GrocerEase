@@ -149,7 +149,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#D4E8FD",
   },
   matchingText: {
-    backgroundColor: "green",
+    color: "green",
   },
   almostText: {
     backgroundColor: "orange",
