@@ -333,7 +333,7 @@ export default class App extends Component {
 						if (typeof existingIngredient == 'undefined') {
 							recipe.matchingIngredients.push(matchedIngredient);	
 						}
-						if ((matchedIngredient.name.length / userIngredient.key.length) < 5 || percentMatch > 0.6 || latestMatch > 0.6) {
+						if ((matchedIngredient.name.length / userIngredient.key.length) < 4.5 || percentMatch > 0.7 || latestMatch > 0.7) {
 							matchedIngredient.perfectMatch = true;
 						}
 					}

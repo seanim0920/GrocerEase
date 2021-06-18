@@ -94,7 +94,11 @@ class ListRow extends PureComponent {
           </Text>
           <Icon
             style={styles.iconInfo}
-            color='#51A4F7'
+            color={
+              this.props.item.manualMatching
+              ? 'orange'
+              : '#51A4F7'
+            }
             name='information-circle'
             size={30}
           />
